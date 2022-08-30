@@ -1,0 +1,34 @@
+---
+- hosts: VM
+  name: UPDATE LDOMS
+  serial: 3
+  gather_facts: true
+  tasks:
+    - name: Supply PKG Update Command
+      ansible.builtin.shell:
+        pkg update --be-name s11.4ga --accept || /bin/true
+      register: PKG_update_status
+
+    - name: Rebooting 
+      reboot:
+      when: PKG_update_status.changed
+
+- hosts: PHYSICAL
+  name: UPDATE HOSTS
+  serial: 3
+  gather_facts: true
+  tasks:
+    - name: Supply PKG Update Command
+      ansible.builtin.shell:
+        pkg update --be-name s11.4ga --accept || /bin/true
+      register: PKG_update_status 
+
+    - name: Rebooting 
+      reboot:
+      when: PKG_update_status.changed
+
+
+
+      
+
+
